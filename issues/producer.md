@@ -86,3 +86,4 @@ vorhandenen Domain-Events konsumiert und als Nachrichten an ein Kafka-Topic send
 * Was würde sich für einen Bulk-Import von Kundendaten über die REST-API bzgl. Kafka-Producer ergeben? Versenden wir
   trotzdem ein Event pro Kunde, oder können wir auch hier ein Bulk-Event nutzen, um Anfragen an Kafka zu minimieren?
 * Welche Besonderheiten haben Serialisierungsformate wie Avro oder Protobuf gegenüber JSON?
+* Was ist _Cloud Events_?
