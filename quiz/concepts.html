@@ -523,8 +523,17 @@
   const questionCounter = document.getElementById('question-counter');
   const scoreCounter = document.getElementById('score-counter');
 
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
   function loadQuestion() {
     const q = questions[currentQuestion];
+    shuffleArray(q.options);
     feedbackEl.classList.add('hidden');
     nextBtn.classList.add('hidden');
 
