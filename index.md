@@ -30,6 +30,11 @@ Zentrale Klasse ist der `CustomersService` im Domain-Layer. Über Interceptors w
 CRUD-Operationen automatisch Events gefeuert (CDI Events bzw. Spring Events), die von der
 Kafka-Schicht weiterverarbeitet werden.
 
+## Kafka-Konzepte
+
+Eine ausführliche Erläuterung der Kafka-Konzepte findest Du in
+diesem [Baeldung-Artikel](https://www.baeldung.com/apache-kafka).
+
 ## Übungen
 
 * [Story 1: Kafka-Producer](issues/producer.html) — Kundenänderungen als Events versenden

@@ -31,8 +31,10 @@ Nachrichten vom Kafka-Topic empfängt und daraus Kundenstatistiken ableitet und 
 ## 🪜 Arbeitsschritte
 
 1. **Dependencies ergänzen:** Füge die Kafka-Abhängigkeit zu Deinem Projekt hinzu.
-   - _Quarkus:_ SmallRye Reactive Messaging für Kafka
-   - _Spring Boot:_ Spring for Apache Kafka (`spring-kafka`)
+
+- _Quarkus:_ SmallRye Reactive Messaging für Kafka
+- _Spring Boot:_ Spring for Apache Kafka (`spring-kafka`)
+
 2. **Konfiguration anlegen:** Trage die Kafka-Verbindungsdaten (Bootstrap-Server, Topic-Name,
    Consumer-Group-ID) in die Anwendungskonfiguration ein (`application.properties` bzw. `application.yml`).
    Konfiguriere die Deserialisierung passend zum Format des Producers.
@@ -40,22 +42,18 @@ Nachrichten vom Kafka-Topic empfängt und daraus Kundenstatistiken ableitet und 
    des Kafka-Topics abbildet — passend zum Format, das der Producer sendet.
 4. **Kafka-Listener implementieren:** Schreibe eine Komponente, die Nachrichten vom Kafka-Topic
    empfängt und die Statistiken aktualisiert.
-   - _Quarkus:_ Nutze `@Incoming` (SmallRye Reactive Messaging).
-   - _Spring Boot:_ Nutze `@KafkaListener`.
-5. **Statistik-Logik umsetzen:** Implementiere die Logik, die aus den eingehenden Events die
-   Kundenstatistiken berechnet und speichert (z.B. Anzahl der Kunden, Anzahl nach Status).
-6. **REST-Endpunkt bereitstellen:** Stelle die Statistiken über einen REST-Endpunkt zur Verfügung.
-7. **Testen:** Starte beide Services zusammen mit einem Kafka-Broker und prüfe, ob Änderungen am
+
+- _Quarkus:_ Nutze `@Incoming` (SmallRye Reactive Messaging).
+- _Spring Boot:_ Nutze `@KafkaListener`.
+
+5. **Testen:** Starte beide Services zusammen mit einem Kafka-Broker und prüfe, ob Änderungen am
    Kunden im account-service-provider die Statistiken im statistics-service-provider aktualisieren.
-8. _(Optional)_ **Automatisierte Tests schreiben:** Schreibe einen Integrationstest, der verifiziert,
+6. _(Optional)_ **Automatisierte Tests schreiben:** Schreibe einen Integrationstest, der verifiziert,
    dass eingehende Kafka-Nachrichten korrekt verarbeitet werden.
 
-> 💡 **Tipp:** Der statistics-service-provider muss nicht die vollständige Kundeninformation speichern —
-> es reicht, die für die Statistik relevanten Daten zu aggregieren.
-
 **Musterlösung:** Die Pull Requests zeigen die vollständige Implementierung:
-[Quarkus](https://github.com/ueberfuhr-trainings/quarkus-kafka/compare/main...feature/consumer) ·
-[Spring Boot](https://github.com/ueberfuhr-trainings/spring-boot-kafka/compare/main...feature/consumer)
+[Quarkus](https://github.com/ueberfuhr-trainings/quarkus-kafka/compare/feature/producer...feature/consumer) ·
+[Spring Boot](https://github.com/ueberfuhr-trainings/spring-boot-kafka/compare/feature/producer...feature/consumer)
 
 ## 📚 Selbstlernmaterial
 
