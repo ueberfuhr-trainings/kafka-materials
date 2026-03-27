@@ -38,11 +38,15 @@ diesem [Baeldung-Artikel](https://www.baeldung.com/apache-kafka).
 Weitere Themen:
 
 * [Konfiguration (Properties)](docs/properties.html)
+* [Acknowledgements (ACKs)](docs/acks.html)
+* [Auslieferungssemantiken](docs/delivery-semantics.html)
+* [Kafka-Transaktionen](docs/transactions.html)
 * [Retries und Timeouts](docs/retries-timeouts.html)
 * [Fehlerbehandlung](docs/exception-handling.html)
 * [JSON Schema & Schema Registry](docs/json-schema.html)
 * [CloudEvents](docs/cloud-events.html)
 * [Apache AVRO](docs/avro.html)
+* [Kafka und Event Sourcing](docs/event-sourcing.html)
 * [Testen](docs/testing.html)
 
 ## Übungen
