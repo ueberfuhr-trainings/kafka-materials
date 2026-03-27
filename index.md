@@ -59,3 +59,6 @@ siehe auch die zugehörigen Pull Requests.
 
 ## Übungen
 
+* [Story 1: Kafka-Producer](issues/producer.html) — Kundenänderungen als Events versenden
+* [Story 2: Kafka-Consumer](issues/consumer.html) — Kundenstatistiken aus Events ableiten
+
