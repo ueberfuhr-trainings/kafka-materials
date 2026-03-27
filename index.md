@@ -46,6 +46,7 @@ Weitere Themen:
 * [JSON Schema & Schema Registry](docs/json-schema.html)
 * [CloudEvents](docs/cloud-events.html)
 * [Apache AVRO](docs/avro.html)
+* [Kafka Streams](docs/kafka-streams.html)
 * [Kafka und Event Sourcing](docs/event-sourcing.html)
 * [Testen](docs/testing.html)
 
