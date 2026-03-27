@@ -3,99 +3,201 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kafka Grundlagen Quiz</title>
+  <title>Kafka Grundlagen Quiz - ATVANTAGE Academy</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #0f172a;
-      color: #f1f5f9;
+      background-color: #111111;
+      color: #eeeeee;
+    }
+
+    .academy-header {
+      background-color: #1e1e1e;
+      border-bottom: 3px solid #ff5401;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
     }
 
     .quiz-card {
-      background-color: #1e293b;
-      border: 1px solid #334155;
+      background-color: #1e1e1e;
+      border: 1px solid #333333;
       transition: all 0.3s ease;
     }
 
     .option-btn {
-      background-color: #334155;
-      border: 2px solid transparent;
+      background-color: #2a2a2a;
+      border: 2px solid #333333;
       transition: all 0.2s ease;
       text-align: left;
     }
 
     .option-btn:hover:not(:disabled) {
-      background-color: #475569;
-      border-color: #64748b;
+      background-color: #333333;
+      border-color: #444444;
     }
 
     .option-btn.correct {
-      background-color: #065f46;
-      border-color: #10b981;
+      background-color: #14532d;
+      border-color: #22c55e;
     }
 
     .option-btn.wrong {
-      background-color: #7f1d1d;
-      border-color: #ef4444;
+      background-color: #431407;
+      border-color: #ff5401;
     }
 
     .code-block {
-      background-color: #020617;
+      background-color: #000000;
       font-family: 'Courier New', Courier, monospace;
+      border: 1px solid #333333;
+    }
+
+    .email-hover-bridge::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 0;
+      right: 0;
+      height: 20px;
+      background: transparent;
     }
   </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body>
+
+<!-- Academy Top Bar -->
+<nav class="academy-header sticky top-0 z-40 w-full px-6 h-16 flex items-center justify-between">
+  <div class="flex items-center gap-2">
+    <span class="text-xl font-black tracking-tighter text-[#ff5401]">ATVANTAGE</span>
+    <span class="text-xl font-light text-neutral-500">Academy</span>
+  </div>
+  <div class="flex items-center gap-4">
+    <div class="relative group">
+      <button id="email-btn" class="p-2 text-neutral-400 hover:text-[#ff5401] transition-colors"
+              title="E-Mail Kontakt">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+      </button>
+      <div class="absolute right-0 top-10 hidden group-hover:flex items-center gap-3 bg-[#2a2a2a] border border-[#333333] p-2 px-3 rounded-lg shadow-2xl z-50 email-hover-bridge">
+        <a id="email-link-display" href="#"
+           class="text-sm font-medium text-slate-300 hover:text-[#ff5401] transition-colors underline decoration-dotted underline-offset-4 decoration-slate-600">academy@atvantage.com</a>
+        <button id="copy-email-sub-btn"
+                class="bg-[#ff5401] hover:bg-[#e64a00] p-1.5 rounded transition-colors text-[#111111]"
+                title="Kopieren">
+          <svg id="copy-icon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+          </svg>
+          <svg id="check-icon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 hidden" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="w-full min-h-screen flex items-center justify-center p-4 md:p-8">
 
 <div id="quiz-container" class="w-full max-w-2xl">
   <!-- Header -->
   <div class="mb-8 text-center">
-    <h1 class="text-3xl font-bold text-sky-400 mb-2">Kafka Wissens-Check</h1>
-    <p class="text-slate-400">Das Quiz für moderne Daten-Logistiker</p>
-    <div class="mt-4 flex justify-between items-center text-xs text-slate-500 mb-1">
+    <h1 class="text-4xl font-extrabold text-white mb-2 tracking-tight">Kafka <span class="text-[#ff5401]">Wissens-Check</span></h1>
+    <p class="text-neutral-500">Das Quiz für moderne Daten-Logistiker</p>
+    <div class="mt-4 flex justify-between items-center text-xs text-neutral-500 mb-1">
       <span id="question-counter">Frage 1 von 15</span>
       <span id="score-counter">Punkte: 0</span>
     </div>
-    <div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-      <div id="progress-bar" class="h-full bg-sky-500 transition-all duration-500" style="width: 0%"></div>
+    <div class="h-2 w-full bg-[#1e1e1e] rounded-full overflow-hidden border border-[#333333]">
+      <div id="progress-bar" class="h-full bg-[#ff5401] transition-all duration-500" style="width: 0%"></div>
     </div>
   </div>
 
   <!-- Question Card -->
   <div id="question-card" class="quiz-card p-6 rounded-2xl shadow-2xl">
     <div id="question-content">
-      <!-- Content will be injected here -->
     </div>
 
     <div id="options-container" class="space-y-3 mt-6">
-      <!-- Options will be injected here -->
     </div>
 
     <div id="feedback" class="mt-6 p-4 rounded-lg hidden border-l-4">
-      <!-- Feedback text -->
     </div>
 
     <button id="next-btn"
-            class="mt-6 w-full py-3 bg-sky-600 hover:bg-sky-500 font-semibold rounded-xl transition-colors hidden">
+            class="mt-6 w-full py-3 bg-[#ff5401] hover:bg-[#e64a00] font-semibold rounded-xl transition-colors hidden text-white">
       Nächste Frage
     </button>
   </div>
 
   <!-- Result Screen -->
   <div id="result-screen" class="quiz-card p-8 rounded-2xl shadow-2xl text-center hidden">
-    <h2 class="text-4xl font-bold text-sky-400 mb-4">Training beendet!</h2>
+    <h2 class="text-4xl font-extrabold text-white mb-4">Training <span class="text-[#ff5401]">beendet!</span></h2>
     <p id="final-score" class="text-xl mb-6"></p>
-    <div id="score-interpretation" class="mb-8 text-slate-400"></div>
-    <button onclick="location.reload()" class="px-8 py-3 bg-sky-600 hover:bg-sky-500 font-semibold rounded-xl">
+    <div id="score-interpretation" class="mb-8 text-neutral-400"></div>
+    <button onclick="location.reload()" class="px-8 py-3 bg-[#ff5401] hover:bg-[#e64a00] font-semibold rounded-xl text-white transition-colors">
       Quiz neu starten
     </button>
   </div>
 </div>
 
+</div>
+
 <script>
+  function getAcademyEmail() {
+    const part1 = 'academy';
+    const part2 = 'atvantage.com';
+    return part1 + '@' + part2;
+  }
+
+  // E-Mail Anzeige initialisieren
+  const emailLink = document.getElementById('email-link-display');
+  emailLink.innerText = getAcademyEmail();
+
+  // E-Mail Logik (Header Button)
+  document.getElementById('email-btn').onclick = function () {
+    window.location.href = 'mailto:' + getAcademyEmail();
+  };
+
+  // E-Mail Logik (Popup Link)
+  emailLink.onclick = function (e) {
+    e.preventDefault();
+    window.location.href = 'mailto:' + getAcademyEmail();
+  };
+  emailLink.onmouseenter = function () {
+    this.href = 'mailto:' + getAcademyEmail();
+  };
+
+  // E-Mail Kopieren
+  document.getElementById('copy-email-sub-btn').onclick = function () {
+    const email = getAcademyEmail();
+    const temp = document.createElement('textarea');
+    temp.value = email;
+    document.body.appendChild(temp);
+    temp.select();
+    try {
+      document.execCommand('copy');
+      const copyIcon = document.getElementById('copy-icon');
+      const checkIcon = document.getElementById('check-icon');
+      copyIcon.classList.add('hidden');
+      checkIcon.classList.remove('hidden');
+      setTimeout(() => {
+        copyIcon.classList.remove('hidden');
+        checkIcon.classList.add('hidden');
+      }, 2000);
+    } catch (err) {
+      console.error('Kopieren fehlgeschlagen');
+    }
+    document.body.removeChild(temp);
+  };
+
   const questions = [
     {
       description: "Stellen Sie sich Kafka als ein riesiges, digitales Fließband vor.",
@@ -431,14 +533,14 @@
     scoreCounter.innerText = `Punkte: ${score}`;
 
     let html = `
-                <p class="text-slate-300 mb-4 italic">"${q.description}"</p>
-                <div class="bg-slate-800/50 p-4 rounded-xl border-l-4 border-sky-500 mb-6">
-                    <p class="text-lg font-medium text-slate-100">${q.question}</p>
+                <p class="text-neutral-400 mb-4 italic">"${q.description}"</p>
+                <div class="bg-[#111111] p-4 rounded-xl border-l-4 border-[#ff5401] mb-6">
+                    <p class="text-lg font-medium text-white">${q.question}</p>
                 </div>
             `;
 
     if (q.code) {
-      html += `<pre class="code-block p-4 rounded-lg text-sm text-green-400 mb-6 border border-slate-700 overflow-x-auto shadow-inner">${q.code}</pre>`;
+      html += `<pre class="code-block p-4 rounded-lg text-sm text-green-400 mb-6 overflow-x-auto shadow-inner">${q.code}</pre>`;
     }
 
     questionContent.innerHTML = html;
@@ -446,10 +548,10 @@
 
     q.options.forEach((opt, index) => {
       const btn = document.createElement('button');
-      btn.className = 'option-btn w-full p-4 rounded-xl text-slate-200 shadow-sm border border-slate-700/50 hover:translate-x-1';
+      btn.className = 'option-btn w-full p-4 rounded-xl text-neutral-200 shadow-sm hover:translate-x-1';
       btn.innerHTML = `
                     <div class="flex items-start gap-3">
-                        <span class="flex-none w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold">${String.fromCharCode(65 + index)}</span>
+                        <span class="flex-none w-6 h-6 rounded-full bg-[#333333] flex items-center justify-center text-xs font-bold">${String.fromCharCode(65 + index)}</span>
                         <span>${opt.text}</span>
                     </div>
                 `;
@@ -478,7 +580,7 @@
     }
 
     feedbackEl.innerText = q.options[index].feedback;
-    feedbackEl.className = `mt-6 p-4 rounded-xl border-l-4 ${isCorrect ? 'bg-emerald-900/20 border-emerald-500 text-emerald-300' : 'bg-rose-900/20 border-rose-500 text-rose-300'}`;
+    feedbackEl.className = `mt-6 p-4 rounded-xl border-l-4 ${isCorrect ? 'bg-emerald-900/20 border-emerald-500 text-emerald-300' : 'bg-[#431407]/50 border-[#ff5401] text-orange-300'}`;
     feedbackEl.classList.remove('hidden');
     nextBtn.classList.remove('hidden');
     scoreCounter.innerText = `Punkte: ${score}`;
