@@ -83,5 +83,7 @@ vorhandenen Domain-Events konsumiert und als Nachrichten an ein Kafka-Topic send
 * Welche Rolle spielt der Partition Key beim Versenden von Nachrichten? Warum verwenden wir die Kunden-ID als Key?
 * Was passiert, wenn der Kafka-Broker beim Senden einer Nachricht nicht erreichbar ist?
   Wie könnte man damit umgehen?
+* Was würde sich für einen Bulk-Import von Kundendaten über die REST-API bzgl. Kafka-Producer ergeben? Versenden wir
+  trotzdem ein Event pro Kunde, oder können wir auch hier ein Bulk-Event nutzen, um Anfragen an Kafka zu minimieren?
 * Welche Serialisierungsformate kommen für Kafka-Nachrichten in Frage (z.B. JSON, Avro, Protobuf)?
   Welche Vor- und Nachteile haben sie?
