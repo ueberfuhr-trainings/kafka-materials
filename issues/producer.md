@@ -28,8 +28,10 @@ vorhandenen Domain-Events konsumiert und als Nachrichten an ein Kafka-Topic send
 ## 🪜 Arbeitsschritte
 
 1. **Dependencies ergänzen:** Füge die Kafka-Abhängigkeit zu Deinem Projekt hinzu.
-  - _Quarkus:_ SmallRye Reactive Messaging für Kafka
-  - _Spring Boot:_ Spring for Apache Kafka (`spring-kafka`)
+
+- _Quarkus:_ SmallRye Reactive Messaging für Kafka
+- _Spring Boot:_ Spring for Apache Kafka (`spring-kafka`)
+
 2. **Konfiguration anlegen:** Trage die Kafka-Verbindungsdaten (Bootstrap-Server, Topic-Name) in die
    Anwendungskonfiguration ein (`application.properties` bzw. `application.yml`).
 3. **Nachrichtenformat definieren:** Erstelle eine Klasse (z.B. ein Record), die das Nachrichtenformat für
@@ -37,8 +39,10 @@ vorhandenen Domain-Events konsumiert und als Nachrichten an ein Kafka-Topic send
    der Domain-Events in dieses Format überführt.
 4. **Event-Listener implementieren:** Schreibe eine Komponente, die auf die Domain-Events aus dem
    `CustomersService` lauscht und die Nachrichten an das Kafka-Topic sendet.
-  - _Quarkus:_ Nutze `@Observes` und einen `Emitter` (SmallRye Reactive Messaging).
-  - _Spring Boot:_ Nutze `@EventListener` und `KafkaTemplate`.
+
+- _Quarkus:_ Nutze `@Observes` und einen `Emitter` (SmallRye Reactive Messaging).
+- _Spring Boot:_ Nutze `@EventListener` und `KafkaTemplate`.
+
 5. **Testen:** Starte die Anwendung zusammen mit einem Kafka-Broker (z.B. per Docker Compose) und prüfe,
    ob beim Anlegen/Ändern/Löschen von Kunden Nachrichten im Topic ankommen.
 6. _(Optional)_ **Automatisierte Tests schreiben:** Schreibe einen Integrationstest, der verifiziert,
@@ -76,8 +80,7 @@ vorhandenen Domain-Events konsumiert und als Nachrichten an ein Kafka-Topic send
 
 * Warum ist es sinnvoll, die Kafka-Schicht von der Geschäftslogik zu entkoppeln und Domain-Events als
   Brücke zu nutzen — statt direkt aus dem Service an Kafka zu senden?
-* Welche Rolle spielt der Partition Key beim Versenden von Nachrichten? Was passiert, wenn Du die
-  Kunden-UUID als Key verwendest?
+* Welche Rolle spielt der Partition Key beim Versenden von Nachrichten? Warum verwenden wir die Kunden-ID als Key?
 * Was passiert, wenn der Kafka-Broker beim Senden einer Nachricht nicht erreichbar ist?
   Wie könnte man damit umgehen?
 * Welche Serialisierungsformate kommen für Kafka-Nachrichten in Frage (z.B. JSON, Avro, Protobuf)?
