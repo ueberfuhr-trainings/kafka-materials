@@ -85,5 +85,3 @@ vorhandenen Domain-Events konsumiert und als Nachrichten an ein Kafka-Topic send
   Wie könnte man damit umgehen?
 * Welche Serialisierungsformate kommen für Kafka-Nachrichten in Frage (z.B. JSON, Avro, Protobuf)?
   Welche Vor- und Nachteile haben sie?
-* Was wäre anders, wenn Du statt eines Event-Listeners den Kafka-Producer direkt im Interceptor
-  aufrufen würdest? Welche Nachteile hätte das?
