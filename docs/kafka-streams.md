@@ -75,7 +75,7 @@ Bei einem Neustart wird der State Store automatisch aus dem Changelog-Topic wied
 ### Topologie
 
 Eine Kafka-Streams-Anwendung definiert eine **Topologie**: einen gerichteten Graphen aus
-Quellen (Source Topics), Verarbeitungsschritten (Processors) und Senken (Sink Topics).
+Quellen (Source Topics), Verarbeitungsschritten (Processors) und optionalen Senken (Sink Topics).
 
 ```
 Source Topic(s) ──► Processor 1 ──► Processor 2 ──► Sink Topic(s)
@@ -83,6 +83,53 @@ Source Topic(s) ──► Processor 1 ──► Processor 2 ──► Sink Topic
                         ▼
                    State Store
 ```
+
+### Muss das Ergebnis immer in ein Topic geschrieben werden?
+
+Nein. Nicht jede Kafka-Streams-Anwendung schreibt ihr Ergebnis in ein Ziel-Topic.
+Es gibt drei typische Ausgabevarianten:
+
+**1. Schreiben in ein Ziel-Topic** (`to()`):
+
+```java
+stream.mapValues(event -> transform(event))
+  .to("output-topic");
+```
+
+**2. Nur im State Store halten** — kein Ziel-Topic nötig:
+
+```java
+stream.groupByKey()
+  .count(Materialized.as("my-counter"));
+// Kein .toStream().to() — der Zustand liegt nur im State Store.
+// Zugriff über Interactive Queries (z.B. per REST-Endpunkt).
+```
+
+Hier dient der State Store als lokale, abfragbare Datenbank. Die Ergebnisse werden nicht
+nach Kafka zurückgeschrieben, sondern über **Interactive Queries** (siehe unten) bereitgestellt —
+z.B. als REST-API.
+
+**3. Seiteneffekte auslösen** (`foreach()`, `peek()`):
+
+```java
+stream.foreach((key, event) -> {
+  emailService.sendNotification(event);
+  metricsCounter.increment();
+});
+```
+
+Mit `foreach()` können beliebige Aktionen ausgeführt werden — z.B. externe APIs aufrufen,
+Metriken aktualisieren oder Logs schreiben. Die Verarbeitungskette endet hier, ohne dass
+ein Topic geschrieben wird.
+
+> [!CAUTION]
+> `foreach()` bietet **keine Exactly-Once-Garantie** für den Seiteneffekt selbst.
+> Kafka Streams kann garantieren, dass die Nachricht genau einmal verarbeitet wird,
+> aber nicht, dass der externe Aufruf (E-Mail, API-Call) genau einmal stattfindet.
+> Bei Fehlern und Reprocessing kann der Seiteneffekt erneut ausgeführt werden.
+
+In der Praxis werden diese Varianten oft kombiniert: Ergebnisse in ein Topic schreiben **und**
+gleichzeitig im State Store für Interactive Queries vorhalten.
 
 
 ## Anwendungsfälle
