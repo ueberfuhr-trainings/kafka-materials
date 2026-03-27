@@ -19,10 +19,10 @@ Klone oder lade das Repository in der Variante Deiner Wahl herunter (Branch `mai
 
 Jedes Repository enthält zwei Microservices:
 
-| Service                        | Beschreibung                                                  |
-|--------------------------------|---------------------------------------------------------------|
-| **account-service-provider**   | Verwaltet Kunden (CRUD) und publiziert Events an Kafka        |
-| **statistics-service-provider**| Konsumiert Kunden-Events und pflegt Statistiken über Kunden   |
+| Service                         | Beschreibung                                                |
+|---------------------------------|-------------------------------------------------------------|
+| **account-service-provider**    | Verwaltet Kunden (CRUD) und publiziert Events an Kafka      |
+| **statistics-service-provider** | Konsumiert Kunden-Events und pflegt Statistiken über Kunden |
 
 Die Services nutzen eine Schichtenarchitektur (angelehnt an Onion Architecture) mit den Schichten
 **boundary** (REST-API), **domain** (Geschäftslogik), **persistence** (Datenbank) und **kafka**.
@@ -42,7 +42,8 @@ Du implementierst im **account-service-provider** einen Kafka-Producer, der die 
 (`CustomerCreatedEvent`, `CustomerReplacedEvent`, `CustomerDeletedEvent`) konsumiert und als
 Nachrichten an ein Kafka-Topic sendet.
 
-**Musterlösung:** Branch [`feature/producer`](https://github.com/ueberfuhr-trainings/quarkus-kafka/compare/main...feature/producer)
+**Musterlösung:** Branch [
+`feature/producer`](https://github.com/ueberfuhr-trainings/quarkus-kafka/compare/main...feature/producer)
 ([Spring Boot](https://github.com/ueberfuhr-trainings/spring-boot-kafka/compare/main...feature/producer)) —
 siehe auch die zugehörigen Pull Requests.
 
@@ -53,7 +54,8 @@ siehe auch die zugehörigen Pull Requests.
 Du implementierst im **statistics-service-provider** einen Kafka-Consumer, der die Nachrichten
 vom Kafka-Topic empfängt und daraus Kundenstatistiken ableitet und aktualisiert.
 
-**Musterlösung:** Branch [`feature/consumer`](https://github.com/ueberfuhr-trainings/quarkus-kafka/compare/main...feature/consumer)
+**Musterlösung:** Branch [
+`feature/consumer`](https://github.com/ueberfuhr-trainings/quarkus-kafka/compare/main...feature/consumer)
 ([Spring Boot](https://github.com/ueberfuhr-trainings/spring-boot-kafka/compare/main...feature/consumer)) —
 siehe auch die zugehörigen Pull Requests.
 
@@ -62,3 +64,6 @@ siehe auch die zugehörigen Pull Requests.
 * [Story 1: Kafka-Producer](issues/producer.html) — Kundenänderungen als Events versenden
 * [Story 2: Kafka-Consumer](issues/consumer.html) — Kundenstatistiken aus Events ableiten
 
+## Wiederholung
+
+* [Quiz zu Kafka-Konzepten](quiz/concepts.html)

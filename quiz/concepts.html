@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kafka Grundlagen Quiz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a;
+      color: #f1f5f9;
+    }
+
+    .quiz-card {
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      transition: all 0.3s ease;
+    }
+
+    .option-btn {
+      background-color: #334155;
+      border: 2px solid transparent;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      background-color: #475569;
+      border-color: #64748b;
+    }
+
+    .option-btn.correct {
+      background-color: #065f46;
+      border-color: #10b981;
+    }
+
+    .option-btn.wrong {
+      background-color: #7f1d1d;
+      border-color: #ef4444;
+    }
+
+    .code-block {
+      background-color: #020617;
+      font-family: 'Courier New', Courier, monospace;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+<div id="quiz-container" class="w-full max-w-2xl">
+  <!-- Header -->
+  <div class="mb-8 text-center">
+    <h1 class="text-3xl font-bold text-sky-400 mb-2">Kafka Wissens-Check</h1>
+    <p class="text-slate-400">Das Quiz für moderne Daten-Logistiker</p>
+    <div class="mt-4 flex justify-between items-center text-xs text-slate-500 mb-1">
+      <span id="question-counter">Frage 1 von 15</span>
+      <span id="score-counter">Punkte: 0</span>
+    </div>
+    <div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+      <div id="progress-bar" class="h-full bg-sky-500 transition-all duration-500" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <!-- Question Card -->
+  <div id="question-card" class="quiz-card p-6 rounded-2xl shadow-2xl">
+    <div id="question-content">
+      <!-- Content will be injected here -->
+    </div>
+
+    <div id="options-container" class="space-y-3 mt-6">
+      <!-- Options will be injected here -->
+    </div>
+
+    <div id="feedback" class="mt-6 p-4 rounded-lg hidden border-l-4">
+      <!-- Feedback text -->
+    </div>
+
+    <button id="next-btn"
+            class="mt-6 w-full py-3 bg-sky-600 hover:bg-sky-500 font-semibold rounded-xl transition-colors hidden">
+      Nächste Frage
+    </button>
+  </div>
+
+  <!-- Result Screen -->
+  <div id="result-screen" class="quiz-card p-8 rounded-2xl shadow-2xl text-center hidden">
+    <h2 class="text-4xl font-bold text-sky-400 mb-4">Training beendet!</h2>
+    <p id="final-score" class="text-xl mb-6"></p>
+    <div id="score-interpretation" class="mb-8 text-slate-400"></div>
+    <button onclick="location.reload()" class="px-8 py-3 bg-sky-600 hover:bg-sky-500 font-semibold rounded-xl">
+      Quiz neu starten
+    </button>
+  </div>
+</div>
+
+<script>
+  const questions = [
+    {
+      description: "Stellen Sie sich Kafka als ein riesiges, digitales Fließband vor.",
+      question: "Wie nennt man die thematische Kategorie oder den 'Ordner', in dem Nachrichten abgelegt werden?",
+      options: [
+        {
+          text: "Topic",
+          correct: true,
+          feedback: "Richtig! Ein Topic ist die logische Einheit für ein Thema, z.B. 'BESTELLUNGEN'."
+        },
+        {
+          text: "Broker",
+          correct: false,
+          feedback: "Der Broker ist die Software-Instanz (der Server), nicht die Kategorie."
+        },
+        {text: "Partition", correct: false, feedback: "Eine Partition ist eine Unterteilung eines Topics."},
+        {text: "Payload", correct: false, feedback: "Payload ist der eigentliche Inhalt der Nachricht."}
+      ]
+    },
+    {
+      description: "In der Kafka-Welt gibt es spezialisierte Software-Instanzen, die Nachrichten verwalten.",
+      question: "Wie wird eine einzelne Instanz innerhalb eines Kafka-Verbunds bezeichnet?",
+      options: [
+        {
+          text: "Kafka-Broker",
+          correct: true,
+          feedback: "Richtig! Er 'vermittelt' (brokert) Nachrichten zwischen Sendern und Empfängern."
+        },
+        {text: "Kafka-Agent", correct: false, feedback: "Das ist kein Standardbegriff bei Kafka."},
+        {
+          text: "Kafka-Client",
+          correct: false,
+          feedback: "Clients sind die Programme, die Kafka nutzen (Producer/Consumer)."
+        },
+        {text: "Kafka-Host", correct: false, feedback: "Man sagt Broker."}
+      ]
+    },
+    {
+      description: "Daten werden von Systemen erzeugt und weggeschickt.",
+      question: "Wie nennt man eine Anwendung, die Daten in das System einspeist?",
+      options: [
+        {text: "Producer", correct: true, feedback: "Genau! Der Producer 'produziert' die Events."},
+        {text: "Consumer", correct: false, feedback: "Der Consumer liest die Daten."},
+        {text: "Uploader", correct: false, feedback: "Bei Kafka sagen wir Producer."},
+        {text: "Source", correct: false, feedback: "Klingt passend, aber der Fachbegriff ist Producer."}
+      ]
+    },
+    {
+      description: "Kafka transportiert verschiedenste Datenformate zwischen Systemen.",
+      question: "Wie viel weiß Kafka über den fachlichen Inhalt (z.B. ein JSON-Dokument) einer Nachricht?",
+      options: [
+        {
+          text: "Gar nichts. Kafka sieht nur rohe Bytes (Nullen und Einsen).",
+          correct: true,
+          feedback: "Richtig! Kafka ist agnostisch und überlässt die Interpretation den Apps."
+        },
+        {
+          text: "Kafka prüft, ob das JSON-Format gültig ist.",
+          correct: false,
+          feedback: "Nein, Kafka ist das Format völlig egal."
+        },
+        {
+          text: "Kafka extrahiert automatisch wichtige Felder aus dem JSON.",
+          correct: false,
+          feedback: "Nein, das muss die Applikation machen."
+        },
+        {
+          text: "Kafka übersetzt JSON in andere Formate.",
+          correct: false,
+          feedback: "Nein, Kafka leitet nur unverändert weiter."
+        }
+      ]
+    },
+    {
+      description: "Ein Team möchte Sicherungsdateien (ca. 1GB) verschicken.",
+      question: "Was wäre der empfohlene Lösungsansatz für diesen Fall?",
+      options: [
+        {
+          text: "Die Datei in einen Cloud-Speicher (z.B. S3) legen und nur den Link dorthin via Kafka senden.",
+          correct: true,
+          feedback: "Richtig! Man nennt dies 'Claim Check Pattern'. Kafka bleibt so schnell und leichtgewichtig."
+        },
+        {
+          text: "Die Datei in 10.000 kleine Stücke schneiden und nacheinander senden.",
+          correct: false,
+          feedback: "Das wäre sehr komplex zu verwalten und ineffizient."
+        },
+        {
+          text: "Den Kafka-Broker bitten, mehr Speicher zu reservieren.",
+          correct: false,
+          feedback: "Das löst das Performance-Problem beim Streamen großer Datenmengen nicht."
+        },
+        {
+          text: "Das Topic darf nur eine Partition haben.",
+          correct: false,
+          feedback: "Falsch. Eine einzelne Partition hilft nicht bei der Dateigröße und würde zudem die Parallelität verhindern."
+        }
+      ]
+    },
+    {
+      description: "Stellen Sie sich vor, ein Empfänger ist für kurze Zeit überlastet.",
+      question: "Nach welchem Prinzip holt sich ein Consumer seine Daten ab?",
+      options: [
+        {
+          text: "Pull-Prinzip (Der Empfänger fragt aktiv nach, wenn er bereit ist).",
+          correct: true,
+          feedback: "Korrekt! Das schützt den Empfänger vor Überflutung."
+        },
+        {
+          text: "Push-Prinzip (Kafka drückt die Daten sofort zum Empfänger).",
+          correct: false,
+          feedback: "Nein, das würde langsame Empfänger überfordern."
+        },
+        {
+          text: "Sync-Prinzip (Sender und Empfänger müssen gleichzeitig online sein).",
+          correct: false,
+          feedback: "Falsch. Kafka puffert die Daten."
+        },
+        {text: "Mailbox-Prinzip.", correct: false, feedback: "Klingt ähnlich, der Fachbegriff ist Pull."}
+      ]
+    },
+    {
+      description: "Ein Consumer erhält rohe Daten, muss diese aber für die Fachlichkeit aufbereiten.",
+      question: "Wer ist dafür verantwortlich, die Bytes wieder in ein fachliches Objekt umzuwandeln?",
+      options: [
+        {text: "Der Consumer", correct: true, feedback: "Richtig! Er muss die Deserialisierung durchführen."},
+        {text: "Der Broker", correct: false, feedback: "Der Broker leitet die Bytes nur unverändert weiter."},
+        {
+          text: "Der Producer",
+          correct: false,
+          feedback: "Der Producer packt beim Senden ein, hilft beim Auspacken aber nicht mehr."
+        },
+        {text: "Das Netzwerk-Kabel.", correct: false, feedback: "Sicher nicht."}
+      ]
+    },
+    {
+      description: "Nachrichten in Kafka werden nicht ewig gespeichert.",
+      question: "Wie regelt man, wie lange Daten auf dem Fließband verfügbar bleiben?",
+      options: [
+        {
+          text: "Über die Retention Policy (Haltedauer).",
+          correct: true,
+          feedback: "Genau! Zum Beispiel werden Nachrichten nach 7 Tagen automatisch gelöscht."
+        },
+        {
+          text: "Die Daten verschwinden, sobald sie einmal gelesen wurden.",
+          correct: false,
+          feedback: "Falsch. Mehrere Gruppen können dieselben Daten lesen."
+        },
+        {
+          text: "Der Producer bestimmt das Löschdatum pro Nachricht.",
+          correct: false,
+          feedback: "Nein, das wird am Topic eingestellt."
+        },
+        {
+          text: "Die Daten bleiben bis zum nächsten Server-Update.",
+          correct: false,
+          feedback: "Nein, das regelt die Retention."
+        }
+      ]
+    },
+    {
+      description: "Kafka merkt sich pro Partition und pro Consumer-Gruppe eine fortlaufende Nummer (den Index) der zuletzt abgeholten Nachricht. Dies nennt man 'Offset'.",
+      question: "Warum macht Kafka das?",
+      options: [
+        {
+          text: "Damit ein Consumer nach einer Pause oder einem Absturz genau dort weitermachen kann, wo er aufgehört hat.",
+          correct: true,
+          feedback: "Richtig! Es ist wie ein Lesezeichen in einem Buch."
+        },
+        {
+          text: "Um die Nachrichten alphabetisch zu sortieren.",
+          correct: false,
+          feedback: "Nein, Offsets sind zeitliche Reihenfolgen."
+        },
+        {
+          text: "Um dem Producer eine Rechnung zu schicken.",
+          correct: false,
+          feedback: "Nein, es dient der technischen Positionsbestimmung."
+        },
+        {
+          text: "Um Dubletten sofort zu löschen.",
+          correct: false,
+          feedback: "Das ist nicht die primäre Aufgabe des Offsets."
+        }
+      ]
+    },
+    {
+      description: "Nehmen wir an, wir haben 3 Instanzen desselben Microservices, die sich die Verarbeitungslast teilen sollen.",
+      question: "Wie müssen diese Instanzen organisiert sein, um sich die Arbeit eines Topics zu TEILEN?",
+      options: [
+        {
+          text: "Sie müssen sich dieselbe Consumer Group ID teilen.",
+          correct: true,
+          feedback: "Korrekt! Kafka verteilt die Partitionen dann auf die 3 Instanzen."
+        },
+        {
+          text: "Jede Instanz braucht eine eigene, eindeutige Group ID.",
+          correct: false,
+          feedback: "Dann würden alle 3 Instanzen jede Nachricht bearbeiten (dreifache Last)."
+        },
+        {
+          text: "Sie müssen nacheinander geschaltet werden.",
+          correct: false,
+          feedback: "Nein, sie arbeiten parallel in der Gruppe."
+        },
+        {
+          text: "Sie dürfen nicht gleichzeitig laufen.",
+          correct: false,
+          feedback: "Das würde die Skalierung verhindern."
+        }
+      ]
+    },
+    {
+      description: "Ein Broker-Server fällt aufgrund eines Hardware-Defekts aus.",
+      question: "Warum sind die Daten im System trotzdem meist noch verfügbar?",
+      options: [
+        {
+          text: "Wegen der Replikation (Kopien auf anderen Brokern).",
+          correct: true,
+          feedback: "Richtig! Kafka hält Kopien der Daten auf mehreren Instanzen vor."
+        },
+        {text: "Weil der Nutzer die Daten in seinem Browser hat.", correct: false, feedback: "Falsch."},
+        {
+          text: "Weil der Producer die Daten automatisch erneut schickt.",
+          correct: false,
+          feedback: "Das würde nur bei Fehlern im Sendevorgang passieren."
+        },
+        {text: "Weil Kafka eine eingebaute Zeitmaschine hat.", correct: false, feedback: "Schön wär's!"}
+      ]
+    },
+    {
+      description: "Wenn der Datenstrom wächst, wollen wir mehr Empfänger gleichzeitig arbeiten lassen.",
+      question: "Welche technische Unterteilung am Topic ermöglicht diese parallele Bearbeitung?",
+      options: [
+        {
+          text: "Die Partitionen.",
+          correct: true,
+          feedback: "Genau! Mehr Partitionen erlauben mehr parallele Leser in einer Gruppe."
+        },
+        {text: "Die Speichergröße.", correct: false, feedback: "Größe ist nicht gleich Parallelität."},
+        {text: "Die Verschlüsselung.", correct: false, feedback: "Hat keinen Einfluss."},
+        {text: "Die Internetgeschwindigkeit.", correct: false, feedback: "Das ist eine externe Bedingung."}
+      ]
+    },
+    {
+      description: "Ein Beispiel aus der Praxis: 5.000 LKWs senden alle 10 Sekunden ihre GPS-Daten. In der Live-Karte springen die Fahrzeuge plötzlich wild vor und zurück. Hier eine Beispielnachricht:",
+      code: "Key: null\nPayload: {\n  \"vin\": \"DE-TRUCK-42\",\n  \"pos\": \"52.5,13.4\",\n  \"time\": \"10:00:01\"\n}",
+      question: "Was ist die Ursache für das 'Springen' auf der Karte?",
+      options: [
+        {
+          text: "Da der Key 'null' ist, werden die GPS-Daten eines einzelnen LKWs auf unterschiedliche Partitionen verteilt. Da Partitionen keine gemeinsame Reihenfolge garantieren, überholen sich Nachrichten.",
+          correct: true,
+          feedback: "Exakt! Die Reihenfolge ist nur INNERHALB einer Partition garantiert."
+        },
+        {
+          text: "Der LKW fährt schneller als die Nachricht übertragen wird.",
+          correct: false,
+          feedback: "Physikalisch unmöglich."
+        },
+        {
+          text: "Das GPS-Signal wird durch das Internet gestört.",
+          correct: false,
+          feedback: "Das würde Lücken verursachen, aber keine zeitliche Vertauschung."
+        },
+        {text: "Kafka mag keine LKWs.", correct: false, feedback: "Das ist unwahrscheinlich."}
+      ]
+    },
+    {
+      description: "Bezugnehmend auf das LKW-Beispiel: Wir wollen, dass die Route eines LKWs chronologisch bleibt.",
+      question: "Welchen Key sollte der Producer wählen? (VIN = Fahrgestellnummer / Vehicle Identification Number)",
+      options: [
+        {
+          text: "Die VIN (Fahrgestellnummer).",
+          correct: true,
+          feedback: "Richtig! Gleiche VIN = Gleiche Partition = Richtige Reihenfolge für diesen LKW."
+        },
+        {
+          text: "Den Namen des Fahrers.",
+          correct: false,
+          feedback: "Schlecht, da Fahrer das Fahrzeug wechseln könnten."
+        },
+        {text: "Das aktuelle Datum.", correct: false, feedback: "Führt zu einem massiven Stau in einer Partition."},
+        {
+          text: "Den Standort des Hauptquartiers.",
+          correct: false,
+          feedback: "Das löst das Problem der Einzelverfolgung nicht."
+        }
+      ]
+    },
+    {
+      description: "Ein Producer möchte absolut sicher sein, dass eine Nachricht vom Consumer erfolgreich fertig verarbeitet wurde.",
+      question: "Welcher Weg ist dafür in der entkoppelten Kafka-Welt üblich?",
+      options: [
+        {
+          text: "Der Consumer sendet eine Bestätigung in ein separates 'Antwort-Topic'.",
+          correct: true,
+          feedback: "Richtig! Das ist das asynchrone Request-Response Muster."
+        },
+        {
+          text: "Der Broker gibt dem Producer sofort Bescheid, wenn der Consumer fertig ist.",
+          correct: false,
+          feedback: "Nein, der Broker weiß nicht, was der Consumer fachlich tut."
+        },
+        {text: "Der Producer ruft den Consumer per Telefon an.", correct: false, feedback: "Klingt nach viel Arbeit."},
+        {
+          text: "Der Producer schaut alle 5 Minuten in die Datenbank des Consumers.",
+          correct: false,
+          feedback: "Viel zu eng gekoppelt und ineffizient."
+        }
+      ]
+    }
+  ];
+
+  let currentQuestion = 0;
+  let score = 0;
+
+  const questionContent = document.getElementById('question-content');
+  const optionsContainer = document.getElementById('options-container');
+  const feedbackEl = document.getElementById('feedback');
+  const nextBtn = document.getElementById('next-btn');
+  const progressBar = document.getElementById('progress-bar');
+  const questionCounter = document.getElementById('question-counter');
+  const scoreCounter = document.getElementById('score-counter');
+
+  function loadQuestion() {
+    const q = questions[currentQuestion];
+    feedbackEl.classList.add('hidden');
+    nextBtn.classList.add('hidden');
+
+    progressBar.style.width = `${((currentQuestion) / questions.length) * 100}%`;
+    questionCounter.innerText = `Frage ${currentQuestion + 1} von ${questions.length}`;
+    scoreCounter.innerText = `Punkte: ${score}`;
+
+    let html = `
+                <p class="text-slate-300 mb-4 italic">"${q.description}"</p>
+                <div class="bg-slate-800/50 p-4 rounded-xl border-l-4 border-sky-500 mb-6">
+                    <p class="text-lg font-medium text-slate-100">${q.question}</p>
+                </div>
+            `;
+
+    if (q.code) {
+      html += `<pre class="code-block p-4 rounded-lg text-sm text-green-400 mb-6 border border-slate-700 overflow-x-auto shadow-inner">${q.code}</pre>`;
+    }
+
+    questionContent.innerHTML = html;
+    optionsContainer.innerHTML = '';
+
+    q.options.forEach((opt, index) => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn w-full p-4 rounded-xl text-slate-200 shadow-sm border border-slate-700/50 hover:translate-x-1';
+      btn.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <span class="flex-none w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold">${String.fromCharCode(65 + index)}</span>
+                        <span>${opt.text}</span>
+                    </div>
+                `;
+      btn.onclick = () => handleAnswer(index);
+      optionsContainer.appendChild(btn);
+    });
+  }
+
+  function handleAnswer(index) {
+    const q = questions[currentQuestion];
+    const isCorrect = q.options[index].correct;
+    const buttons = optionsContainer.querySelectorAll('.option-btn');
+
+    buttons.forEach(btn => {
+      btn.disabled = true;
+      btn.classList.remove('hover:translate-x-1');
+    });
+
+    if (isCorrect) {
+      buttons[index].classList.add('correct');
+      score++;
+    } else {
+      buttons[index].classList.add('wrong');
+      const correctIdx = q.options.findIndex(o => o.correct);
+      buttons[correctIdx].classList.add('correct');
+    }
+
+    feedbackEl.innerText = q.options[index].feedback;
+    feedbackEl.className = `mt-6 p-4 rounded-xl border-l-4 ${isCorrect ? 'bg-emerald-900/20 border-emerald-500 text-emerald-300' : 'bg-rose-900/20 border-rose-500 text-rose-300'}`;
+    feedbackEl.classList.remove('hidden');
+    nextBtn.classList.remove('hidden');
+    scoreCounter.innerText = `Punkte: ${score}`;
+  }
+
+  nextBtn.onclick = () => {
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+      loadQuestion();
+    } else {
+      showResult();
+    }
+  };
+
+  function showResult() {
+    document.getElementById('question-card').classList.add('hidden');
+    document.getElementById('result-screen').classList.remove('hidden');
+    progressBar.style.width = '100%';
+
+    const percentage = (score / questions.length) * 100;
+    let interpretation = "";
+
+    if (percentage === 100) interpretation = "Herausragend! Du hast Kafka vollkommen verstanden.";
+    else if (percentage >= 80) interpretation = "Sehr gut! Du kennst die Logistik-Geheimnisse von Kafka.";
+    else if (percentage >= 50) interpretation = "Gute Basis! Die wichtigsten Begriffe sitzen schon.";
+    else interpretation = "Ein guter Start! Schau dir die Erklärungen zu Partitionen und Keys noch einmal an.";
+
+    document.getElementById('final-score').innerText = `${score} von ${questions.length} Punkten (${Math.round(percentage)}%)`;
+    document.getElementById('score-interpretation').innerText = interpretation;
+  }
+
+  loadQuestion();
+</script>
+</body>
+</html>
