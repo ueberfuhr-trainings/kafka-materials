@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: 'de' }}">
+
+{%- include head.html -%}
+
+<body>
+
+    <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+
+            <!-- Kopier-Link oben -->
+            <div class="copy-md-bar">
+                <a href="#" onclick="copyMarkdown(); return false;">
+                    Markdown kopieren
+                </a>
+                <span id="copy-status" class="copy-status" aria-live="polite" hidden>
+                    Kopiert!
+                </span>
+            </div>
+
+            <hr />
+
+            {{ content }}
+
+        </div>
+    </main>
+
+    <script>
+        function copyMarkdown() {
+            const markdown = {{ page.content | jsonify
+        }};
+        navigator.clipboard.writeText(markdown).then(() => {
+            const status = document.getElementById("copy-status");
+
+            status.hidden = false;
+            status.classList.add("visible");
+
+            setTimeout(() => {
+                status.classList.remove("visible");
+                status.hidden = true;
+            }, 1500);
+        });
+      }
+    </script>
+
+</body>
+
+</html>
