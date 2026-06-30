@@ -2,3 +2,7 @@ title: Cloud-Native Entwicklung - Übungen
 markdown: kramdown
 theme: minima
 lang: de
+
+# Trainer-Materialien (Auflösungen) werden NICHT auf GitHub Pages veröffentlicht.
+exclude:
+  - trainer/

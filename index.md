@@ -38,6 +38,7 @@ diesem [Baeldung-Artikel](https://www.baeldung.com/apache-kafka).
 Weitere Themen:
 
 * [Konfiguration (Properties)](docs/properties.html)
+* [Hot Partitions (Datenschiefe)](docs/hot-partitions.html)
 * [Acknowledgements (ACKs)](docs/acks.html)
 * [Auslieferungssemantiken](docs/delivery-semantics.html)
 * [Kafka-Transaktionen](docs/transactions.html)
@@ -51,6 +52,13 @@ Weitere Themen:
 * [Testen](docs/testing.html)
 
 ## Übungen
+
+**Konzeptübungen (ohne Code):**
+
+* [Consumer Groups](issues/consumer-groups.html) — Wer liest was? Lastverteilung vs. Broadcast
+* [Partitionierung & Partition Key](issues/partitioning.html) — Welcher Key ist der richtige?
+
+**Implementierung:**
 
 * [Story 1: Kafka-Producer](issues/producer.html) — Kundenänderungen als Events versenden
 * [Story 2: Kafka-Consumer](issues/consumer.html) — Kundenstatistiken aus Events ableiten
