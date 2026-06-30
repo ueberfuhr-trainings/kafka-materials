@@ -64,8 +64,6 @@ Bearbeite die Aufgabe zunächst **für Dich allein**. Tausche Dich erst danach m
 4. **Störfälle durchspielen:** Was passiert, wenn **eine der Mail-Instanzen abstürzt**, während
    `B3` ankommt? Was passiert, wenn **später** ein neues Reporting-Team eine eigene Auswertung
    anschließt, die **alle bisherigen und künftigen** Bestellungen sehen möchte?
-5. **Austauschen:** Vergleicht Eure Lösungen in der Gruppe. Wo habt Ihr Euch unterschieden, und
-   warum?
 
 ## ✅ Definition of Done
 
