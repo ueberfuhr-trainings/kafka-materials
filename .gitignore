@@ -1,0 +1,9 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Jekyll build-Artefakte
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
