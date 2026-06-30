@@ -22,7 +22,7 @@ Die Teilnehmer definieren diese Begriffe selbst. Erwartete Kerninhalte:
 
 * Innerhalb **einer** Consumer Group wird jede Nachricht von **genau einem** Consumer verarbeitet
   → **Lastverteilung**.
-* **Verschiedene** Consumer Groups erhalten **jeweils alle** Nachrichten unabhängig voneinander
+* **Verschiedene** Consumer Groups lesen **jeweils alle** Nachrichten unabhängig voneinander
   → **Broadcast / Fan-out**.
 
 > 💡 Merksatz: *Gleiche Group-ID = Arbeit teilen. Unterschiedliche Group-ID = jeder bekommt alles.*

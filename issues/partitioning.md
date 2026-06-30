@@ -110,7 +110,7 @@ um **sehr hohe Datenmengen**, die später nur **statistisch aggregiert** ausgewe
 
 ## 📚 Selbstlernmaterial
 
-* [Apache Kafka — Topics & Partitions](https://kafka.apache.org/documentation/#intro_topics) —
+* [Apache Kafka — Topics & Partitions](https://kafka.apache.org/43/getting-started/introduction/#main-concepts-and-terminology) —
   Offizielle Einführung in Topics und Partitionen.
 * [Conduktor: Partitions & Keys](https://learn.conduktor.io/kafka/kafka-topics-internals-segments-and-indexes/) —
   Wie Keys auf Partitionen abgebildet werden.

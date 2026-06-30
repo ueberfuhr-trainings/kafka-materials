@@ -16,8 +16,8 @@ in der nächsten Übung.
 * Du kannst die Begriffe **Producer**, **Consumer**, **Consumer Group** und **Offset**
   in eigenen Worten erklären.
 * Du verstehst den Unterschied zwischen **Lastverteilung** (eine Nachricht wird von genau einem
-  Consumer einer Gruppe verarbeitet) und **Broadcast / Fan-out** (jede Gruppe erhält *alle*
-  Nachrichten).
+  Consumer einer Gruppe verarbeitet) und **Broadcast / Fan-out** (jede Gruppe liest *alle*
+  Nachrichten unabhängig voneinander).
 * Du kannst für ein gegebenes Szenario entscheiden, welche Consumer in **dieselbe** und welche
   in **unterschiedliche** Consumer Groups gehören.
 * Du kannst erklären, was beim **Ausfall** eines Consumers und beim **späteren Hinzukommen**
