@@ -50,7 +50,7 @@ Einen umfassenden Guide bietet die [Spring for Apache Kafka-Referenz](https://do
 ```properties
 spring.kafka.bootstrap-servers=localhost:9092
 spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
-spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
+spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JacksonJsonSerializer
 spring.kafka.producer.acks=all
 ```
 
@@ -59,7 +59,7 @@ spring.kafka.producer.acks=all
 ```properties
 spring.kafka.consumer.group-id=my-group
 spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
-spring.kafka.consumer.value-deserializer=org.springframework.kafka.support.serializer.JsonDeserializer
+spring.kafka.consumer.value-deserializer=org.springframework.kafka.support.serializer.JacksonJsonDeserializer
 spring.kafka.consumer.auto-offset-reset=earliest
 ```
 
